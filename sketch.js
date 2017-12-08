@@ -1,24 +1,24 @@
 
 
-//image capture variables
+// Canvas and Image Capture and Variables
 var capture;
 var previousPixels;
 var flow;
 var w = 640,
     h = 480;
 var step = 480/20;
-
 var uMotionGraph, vMotionGraph;
 
-// sound variables 
-//var osc;
+// Sound Variables
+//var osc; // Use if using frequency synth
 var playing = false;
 
 var circles = [];
 
 function setup() {
-    // canvas and flow set-up
-    createCanvas(w, h);
+    // Canvas and Flow Se-up
+    var canvas = createCanvas(w, h);
+    canvas.parent("center-canvas");
     capture = createCapture(VIDEO);
     capture.hide();
     flow = new FlowCalculator(step);
@@ -26,6 +26,7 @@ function setup() {
     vMotionGraph = new Graph(100, -step / 2, +step / 2);
     tint(0, 255, 208);
 
+    // Use if using frequency synth
     // osc set-up
     // osc = new p5.Oscillator();
     // osc.setType('sine');
@@ -34,6 +35,7 @@ function setup() {
 }
 
 function preload(){
+
     print("test")
     noteCSharp = loadSound("http://res.cloudinary.com/dnplskmo3/video/upload/v1512507648/68440__pinkyfinger__piano-c_gcsfxw.wav")
     noteD = loadSound("http://res.cloudinary.com/dnplskmo3/video/upload/v1512507647/68442__pinkyfinger__piano-d_ukf5yo.wav")
@@ -50,8 +52,7 @@ function preload(){
 
 }
 
-
-function playNote(x, y){
+function playNoteAndCircle(x, y){
 
     addCircle(x, y);
     playSound(y);
@@ -59,7 +60,7 @@ function playNote(x, y){
 
 function playSound(y){
 
-    // osc.amp(0.5, 1);
+    // osc.amp(0.5, 1); //Use if using frequency synth
     var note = convertYToNote(y)
     var waveform = convertNoteToWaveform(note)
     waveform.setVolume(0);
@@ -68,9 +69,8 @@ function playSound(y){
     waveform.play();
     var freq = convertNoteToFrequency(note)
     print(note)
-
-    // osc.freq(freq);
-    // playing = true;
+    // osc.freq(freq); //Use if using frequency synth
+    // playing = true; //Use if using frequency synth
 
 }
 
@@ -111,7 +111,7 @@ function convertYToNote(y){
 
 function convertNoteToFrequency(note){
 
-    var frequency = 441.49; //standard a note tuning fork
+    var frequency = 441.49; //Standard A Note Tuning Fork
      switch(note){
         case "c sharp": frequency = 279.39
         break;
@@ -143,7 +143,7 @@ function convertNoteToFrequency(note){
 }
 function convertNoteToWaveform(note){
 
-    var waveform = noteA; //standard a note tuning fork
+    var waveform = noteA; //Standard A Note Tuning Fork
      switch(note){
         case "c sharp": waveform = noteCSharp
         break;
@@ -173,19 +173,18 @@ function convertNoteToWaveform(note){
     return waveform;
 
 }
-function processTouchInput(){
+function processTouchInput(){ //Hacked code from Computer Visioning Template
+    
     var found = false; // found means a long line is found
     var y = 0;
     var x = 0;
     capture.loadPixels();
     if (capture.pixels.length > 0) {
         if (previousPixels) {
-
-            // cheap way to ignore duplicate frames
+            // Cheap way to ignore duplicate frames
             if (same(previousPixels, capture.pixels, 4, width)) {
                 return;
             }
-
             flow.calculate(previousPixels, capture.pixels, capture.width, capture.height);
         }
         previousPixels = copyImage(capture.pixels, previousPixels);
@@ -194,7 +193,6 @@ function processTouchInput(){
         if (flow.flow && flow.flow.u != 0 && flow.flow.v != 0) {
             uMotionGraph.addSample(flow.flow.u);
             vMotionGraph.addSample(flow.flow.v);
-
             strokeWeight(2);
             flow.flow.zones.forEach(function (zone) {
                 stroke(map(zone.u, -step, +step, 0, 255),
@@ -209,17 +207,13 @@ function processTouchInput(){
                         found = true
                     }
                 }
-
             })
         }
-
         noFill();
         stroke(255);
-
     }
     if(found){
-        playNote(x,y);        
-
+        playNoteAndCircle(x,y);        
     }else{
         // osc.amp(0, 12);
         // playing = false;
