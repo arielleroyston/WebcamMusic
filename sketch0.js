@@ -11,7 +11,7 @@ var step = 480/20;
 var uMotionGraph, vMotionGraph;
 
 // sound variables 
-//var osc;
+var osc;
 var playing = false;
 
 var circles = [];
@@ -27,27 +27,10 @@ function setup() {
     tint(0, 255, 208);
 
     // osc set-up
-    // osc = new p5.Oscillator();
-    // osc.setType('sine');
-    // osc.amp(0);
-    // osc.start();
-}
-
-function preload(){
-    print("test")
-    noteCSharp = loadSound("http://res.cloudinary.com/dnplskmo3/video/upload/v1512507648/68440__pinkyfinger__piano-c_gcsfxw.wav")
-    noteD = loadSound("http://res.cloudinary.com/dnplskmo3/video/upload/v1512507647/68442__pinkyfinger__piano-d_ukf5yo.wav")
-    noteDSharp = loadSound("http://res.cloudinary.com/dnplskmo3/video/upload/v1512507649/68444__pinkyfinger__piano-eb_cnohme.wav")
-    noteE = loadSound("http://res.cloudinary.com/dnplskmo3/video/upload/v1512507649/68443__pinkyfinger__piano-e_vhqjov.wav")
-    noteF = loadSound("http://res.cloudinary.com/dnplskmo3/video/upload/v1512507649/68446__pinkyfinger__piano-f_c7kk0s.wav")
-    noteFSharp = loadSound("http://res.cloudinary.com/dnplskmo3/video/upload/v1512507648/68445__pinkyfinger__piano-f_a5lvi3.wav")
-    noteG = loadSound("http://res.cloudinary.com/dnplskmo3/video/upload/v1512507649/68448__pinkyfinger__piano-g_wtzb7y.wav")
-    noteGSharp = loadSound("http://res.cloudinary.com/dnplskmo3/video/upload/v1512507648/68447__pinkyfinger__piano-g_ku79fc.wav")
-    noteA = loadSound("http://res.cloudinary.com/dnplskmo3/video/upload/v1512507646/68437__pinkyfinger__piano-a_gfqqwz.wav")
-    noteASharp = loadSound("http://res.cloudinary.com/dnplskmo3/video/upload/v1512507648/68439__pinkyfinger__piano-bb_cnoe1m.wav")
-    noteB = loadSound("http://res.cloudinary.com/dnplskmo3/video/upload/v1512507646/68438__pinkyfinger__piano-b_eh9cpq.wav")
-    noteC = loadSound("http://res.cloudinary.com/dnplskmo3/video/upload/v1512507645/68441__pinkyfinger__piano-c_yqppot.wav")
-
+    osc = new p5.Oscillator();
+    osc.setType('sine');
+    osc.amp(0);
+    osc.start();
 }
 
 
@@ -59,18 +42,14 @@ function playNote(x, y){
 
 function playSound(y){
 
-    // osc.amp(0.5, 1);
+    osc.amp(0.5, 1);
     var note = convertYToNote(y)
-    var waveform = convertNoteToWaveform(note)
-    waveform.setVolume(0);
-    waveform.setVolume(1, .25, .25);
-    waveform.setVolume(0, .25, .75);
-    waveform.play();
     var freq = convertNoteToFrequency(note)
+
     print(note)
 
-    // osc.freq(freq);
-    // playing = true;
+    osc.freq(freq);
+    playing = true;
 
 }
 
@@ -80,29 +59,29 @@ function convertYToNote(y){
     var rowHeight = h / 12
     var rowNumber = round(y/rowHeight)
     switch(rowNumber){
-        case 0: note = "g sharp"
+        case 0: note = "c sharp"
         break;
-        case 1: note = "a"
+        case 1: note = "d"
         break;
-        case 2: note = "a sharp"
+        case 2: note = "d sharp"
         break;
-        case 3: note = "b"
+        case 3: note = "e"
         break;
-        case 4: note = "c"
+        case 4: note = "f"
         break;
-        case 5: note = "c sharp"
+        case 5: note = "f sharp"
         break;
-        case 6: note = "d"
+        case 6: note = "g"
         break;
-        case 7: note = "d sharp"
+        case 7: note = "g sharp"
         break;
-        case 8: note = "e"
+        case 8: note = "a"
         break;
-        case 9: note = "f"
+        case 9: note = "a sharp"
         break;
-        case 10: note = "f sharp"
+        case 10: note = "b"
         break;
-        case 11: note = "g"
+        case 11: note = "c"
         break;
 
     }
@@ -141,39 +120,7 @@ function convertNoteToFrequency(note){
     return frequency;
 
 }
-function convertNoteToWaveform(note){
-
-    var waveform = noteA; //standard a note tuning fork
-     switch(note){
-        case "c sharp": waveform = noteCSharp
-        break;
-        case "d": waveform = noteD
-        break;
-        case "d sharp": waveform = noteDSharp
-        break;
-        case "e": waveform = noteE
-        break;
-        case "f": waveform = noteF
-        break;
-        case "f sharp": waveform = noteFSharp
-        break;
-        case "g": waveform = noteG
-        break;
-        case "g sharp": waveform = noteGSharp
-        break;
-        case "a": waveform = noteA
-        break;
-        case "a sharp": waveform = noteASharp
-        break;
-        case "b": waveform = noteB
-        break;
-        case "c": waveform = noteC
-        break;
-    }
-    return waveform;
-
-}
-function processTouchInput(){
+function soundStuff(){
     var found = false; // found means a long line is found
     var y = 0;
     var x = 0;
@@ -203,7 +150,7 @@ function processTouchInput(){
                 var length = sqrt(zone.u*zone.u + zone.v*zone.v);
                 //print(length)
                 if (!found){
-                    if (length > 25.0) {
+                    if (length > 16.0) {
                         y = h - zone.y
                         x = zone.x
                         found = true
@@ -221,8 +168,8 @@ function processTouchInput(){
         playNote(x,y);        
 
     }else{
-        // osc.amp(0, 12);
-        // playing = false;
+        osc.amp(0, 12);
+        playing = false;
     }
 }
 
@@ -230,15 +177,15 @@ function addCircle(x, y){
 
     fill(255, 0, 0);
     var r = Math.floor(Math.random() * 255);
-    var g = 0;//Math.floor(Math.random() * 255);
-    var b = 255/2 + Math.floor(Math.random() * 255/2);
+    var g = Math.floor(Math.random() * 255);
+    var b = Math.floor(Math.random() * 255);
     var color = {'r':r, 'g':g, 'b':b, 'a':200}
     circles.push({'x':x,'y':y,'radius':64,'color':color})
 }
 
 
 function draw() {
-    processTouchInput();
+    soundStuff();
     noStroke();
     var newCircles = [];
     var numCircles = circles.length
@@ -259,3 +206,5 @@ function draw() {
     circles = newCircles;
     
 }
+
+
