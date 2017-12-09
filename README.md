@@ -22,6 +22,12 @@ Using the p5 reference library, I learned how to create a circle. I made an addC
 
 I then created a new function called playNote that would add sound and circles together.
 
-#Step 3: Adding Piano Notes
-We initially added notes
-The sound was "clicky", meaning it started at a high volume with a lot of attack. I needed to edit this out - reduce the amount of attack - so I needed to lower the volume through other p5 code.
+# Step 3: Adding Piano Notes
+I wasn't pleased with the synthesizer sound of my project. The sinewave made all the noises sound like alien communication. I wanted something more music. I decided to introduce piano waveform files to create a more piano-y sound.
+
+I found an octave's worth of waveform files, and uploaded them to Cloudinary, a file saving platform. I then preloaded those files into my sketch and tweaked the code to call the files, rather than create a signwave. The sound of the piano was too "clicky", meaning it started at a high volume with a lot of attack. I needed to edit this out - reduce the amount of attack - so I needed to lower the volume through other p5 code.
+
+Through adding new lines of code - waveform.setVolume(0); waveform.setVolume(1, .25, .25); and waveform.setVolume(0, .25, .75); - I was able to alter the volume of each waveform file when it plays to reduce the "click-y" sound.
+
+# Step 4: Creating a URL
+Last, I uploaded my code to a gh-pages branch to enable me to display my project on a URL than anyone could access. I added some HTML formatting into the index file so that I could center the canvas and add a more ominous black background. Now, people who access my application can maximize the screen and be able to focus on only their image and music.
