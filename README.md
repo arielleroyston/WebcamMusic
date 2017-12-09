@@ -2,25 +2,27 @@
 Final Project, Code Lit 2017
 
 # Project Proposal
-Wouldn't it be fun if you could play music in mid-air? And then a screen could capture a beautiful image based on the sound you play? That was my initial idea for my Code Literacy final. I wanted to build a way for people to abstractly play music and create visual art while they did that.
+Wouldn't it be fun if you could play music through moving your hands through space? And then a screen could capture a beautiful image based on the sound you play? That was my initial idea for my Code Literacy final. I wanted to build a way for people to abstractly play music and create visual art while playing sound.
 
-To do this, I drew inspiration from XX's Webcam Piano. However, isntead of using OSC (an oscillator that sends code off to a keyboard), I would be building all of the music interpretations in my application. I would need to think through how a touch gesture would kick off a sound, and how to integrate sounds into an applicaion. I will be using P5 Processing software for this, and subsequently will be leveraging the p5 DOM, Flow, and Sound Libraries to make my idea come to ife.
+To do this, I drew inspiration from Memo Akten's Webcam Piano. However, isntead of using OSC (an oscillator that sends code to a keyboard), I planned to build my webcam piano by leveraging the application to create music. I would need to think through how a touch gesture would ignite a sound, and how to integrate sounds into an applicaion. I decided to use P5 Processing libraries for this, and subsequently leveraged the p5 DOM, Flow, and Sound Libraries to make my idea come to ife.
 
 # Step 1: Adding Touch-Sensor Sound
-I began my project through thinking throug the different aspects of the piano that I wanted to create. I decided to break up my end product into several pieces: 1) a touch sensor that would pick up finger movements through the camera; 2) sound cues from touch; and 3) introducing visuals for each sound / touch combination.
+I began my project through thinking throug the different aspects of the piano that I wanted to create. I decided to break up my end product into several pieces: 1) a touch sensor that would pick up finger movements / input through the camera; 2) sound from processing touch; and 3) introducing visuals for each sound / touch combination.
 
-I decided to leverage existing Computer Visioning code from our class examples to introduce the camera capture logic to track edges and movements. I set out to use the Optical Flow file to lay the ground work for my project. However, I didn't yet do anything to the movements to create sound. 
+I worked off an existing Computer Visioning codebase from our class examples that gave me a base with camera capture logic to track edges and movements. I set out to use the Optical Flow file to lay the ground work for my project. Next, I would need to translate specific movements into sound.  
 
 Once I had my baseline file, I began introducing sound through using the P5 Oscillator, code that creates a signal that oscillates between -1.0 and 1.0. (By default, the oscillation takes the form of a sinusoidal shape ('sine'). The frequency defaults to 440 oscillations per second (440Hz, equal to the pitch of an 'A' note).) I started with building a basic function that allowed me to click anywhere on the canvas and hear a sound. 
 
-Now, I was ready to tweak the Optical Flow logic to integrate the sound playing logic. To do this, I set logic that would tee off sound whenever a long line was created through movement. The long line indicates a great deal of movement, a type of movement that is most representative of what a finger movement would look like (i.e. the camera picks up all sorts of movmeents, but by setting sound to trigger only when sweeping movmeents are made, we could assign large finger movements to play a sound.
+Now, I was ready to tweak the Optical Flow logic to integrate the sound playing logic. To do this, I set logic that would play sound whenever a long line was created through movement. Long line creation was part of the initial flow code -- I creaed a variable that was length to indicate the length of a movement. A long line indicates a great deal of movement, a type of movement that is most representative of what a finger movement would look like. The camera would pick up lots of movements, but only the most dramatic movements would create a long line, and only the longest lines would produce sound. Therefore, finger movements ended up creating sound.
 
-To create the sound, I set up a few functions to help me out. I first created switch functions to convert a Y area into a note, and then a note into a sine frequency. Functiosn were convertYtoNote and convertNotetoFrequency respectively. Then I put this logic into a playSound function to bring it all together. The sound would essentially play wherever my finger hit (and where my invisible optical flow line is longest).
+To create the sound, I set up a few functions. I first created switch functions to convert a Y area into a note, and then a note into a sine frequency. The Y area represents a part of the canvas that would be associated to a different sound. The sound octave goes up and down, and different areas of the canvas represent different ntoes. I used the functions convertYtoNote and convertNotetoFrequency to first convert a section of the canvas to a note, and then convert a note to a sound frequency. Then I put this logic into a playSound function to bring it all together. The sound would essentially play wherever my finger hit (and where my invisible optical flow line is longest).
 
 # Step 2: Adding Color Effects
 Using the p5 reference library, I learned how to create a circle. I made an addCircle funciton, that would create circles with different RGB values that were generated randomly. I then uploaded this function into my playNote function so that circles appeared when sound was initiated.
 
 I then created a new function called playNote that would add sound and circles together.
+
+Tweaking the circle color and stlye was the fun part. I wanted the circles to disappear slowly after they were introduced. I also tweaked the color to only loop around blues and reds, and produce blue, pink, and purple circles. I initially had the colors random, but found the green and yellow colors offputting. Finally, I introduced a blue tint to create the cool color pallette of the webcam piano.
 
 # Step 3: Adding Piano Notes
 I wasn't pleased with the synthesizer sound of my project. The sinewave made all the noises sound like alien communication. I wanted something more music. I decided to introduce piano waveform files to create a more piano-y sound.
